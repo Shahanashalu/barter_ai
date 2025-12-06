@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Barter App{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+    <a href="{% url 'home' %}" style="display:flex; align-items:center;">
+        <div style="
+            height:140px;
+            width:140px;
+            border-radius:30%;
+            background: conic-gradient(
+                #ff4db8,
+                #b560ff,
+                #6dd5ff,
+                #ff4db8
+            );
+            padding:10px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        ">
+            <img src="{% static 'images/logo.png' %}"
+                alt="Swapsha Logo"
+                style="
+                    height:120px;
+                    width:120px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    background:white;
+                ">
+        </div>
+    </a>
+</div>
+
+
+
+
+
+        <div class="nav-links">
+            <a href="{% url 'my_products' %}">My Products</a>
+            <a href="{% url 'add_product' %}">Add Product</a>
+            <a href="{% url 'sent_offers' %}">Sent Offers</a>
+    <a href="{% url 'received_offers' %}">
+        Received Offers 
+        <span id="offerNotify" class="notify-badge" style="
+            background:red;
+            color:white;
+            padding:2px 6px;
+            border-radius:50%;
+            font-size:12px;
+            display:none;
+        ">
+        </span>
+    </a>
+
+            {% if user.is_authenticated %}
+                <div class="wishlist-icon">
+                <a href="{% url 'wishlist' %}" style="position: relative; display: inline-block; font-size: 24px; color: #333;">
+                ❤️
+            <span id="wishlistCount" 
+                style="position: absolute; top: -8px; right: -8px; background:red; color:white; border-radius:50%; padding: 2px 6px; font-size:12px;">
+            {{ request.user.favorites.count }}
+            </span>
+    </a>
+</div>
+
+{% endif %}
+
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'profile' %}" style="margin-left:15px;">Profile</a>
+                <a href="{% url 'logout' %}" style="margin-left:10px;">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" style="margin-left:15px;">Login</a>
+                <a href="{% url 'register' %}" style="margin-left:10px;">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        
+        {% endblock %}
+    </div>
+
+    <script>
+async function checkOfferNotifications() {
+    try {
+        const res = await fetch("{% url 'offer_notification_count' %}");
+        const data = await res.json();
+
+        const badge = document.getElementById("offerNotify");
+
+        if (data.count > 0) {
+            badge.style.display = "inline-block";
+            badge.innerText = data.count;
+        } else {
+            badge.style.display = "none";
+        }
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// Check every 5 seconds
+setInterval(checkOfferNotifications, 5000);
+checkOfferNotifications();
+</script>
+
+</body>
+</html>

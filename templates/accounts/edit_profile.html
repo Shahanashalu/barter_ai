@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit Profile</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Username:</label>
+    <input type="text" name="username" value="{{ profile.user.username }}" required><br>
+
+    <label>Phone:</label>
+    <input type="text" name="phone" value="{{ profile.phone }}"><br>
+
+    <label>Address:</label>
+    <input type="text" name="address" value="{{ profile.address }}"><br>
+
+    <label>City:</label>
+    <input type="text" name="city" value="{{ profile.city }}"><br>
+
+    <label>Pincode:</label>
+    <input type="text" name="pincode" value="{{ profile.pincode }}"><br>
+
+    <button type="submit" class="btn">Save Changes</button>
+</form>
+
+{% endblock %}

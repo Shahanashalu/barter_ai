@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+
+{% if user.is_authenticated %}
+<button id="favBtn" style="border:none;background:none;cursor:pointer;font-size:24px;">
+    {% if product in user.favorites.all %}
+        ❤️
+    {% else %}
+        🤍
+    {% endif %}
+</button>
+{% endif %}
+
+<script>
+{% if user.is_authenticated %}
+const favBtn = document.getElementById('favBtn');
+const wishlistCount = document.getElementById('wishlistCount');
+
+favBtn.addEventListener('click', async () => {
+    try {
+        const res = await fetch("{% url 'toggle_favorite' product.id %}", {
+            method: 'POST',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'}
+        });
+        const data = await res.json();
+
+        if(data.status === 'added') {
+            favBtn.innerText = '❤️';
+        } else if(data.status === 'removed') {
+            favBtn.innerText = '🤍';
+        }
+
+        // Update the floating wishlist count dynamically
+        wishlistCount.innerText = data.count;
+
+    } catch(err){ console.error(err); }
+});
+{% endif %}
+favBtn.classList.add('pop');
+setTimeout(() => favBtn.classList.remove('pop'), 300);
+
+</script>
+
+
+<div class="container product-detail">
+    <div class="product-detail-image">
+        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+    </div>
+    <div class="product-detail-info">
+        <h2>Title: {{ product.title }}</h2>
+        <p>Description: {{ product.description }}</p>
+        <p>Category: {{ product.category }}</p>
+        <p>Condition: {{ product.condition }}</p>
+        <p>manufactured: {{ product.created_at }}</p>
+        <p class="price">₹{{ product.estimated_value|floatformat:2 }}</p>
+        <p class="avg-rating">Rating: {{ avg_rating }} / 5</p>
+        <!-- Send Offer Button -->
+{% if user.is_authenticated and product.user != user %}
+<a href="{% url 'send_offer' product.id %}" class="btn" style="margin-top: 10px;">
+    Send Offer
+</a>
+{% endif %}
+
+        
+        <!-- Reviews -->
+        <h3>Reviews</h3>
+        {% for review in reviews %}
+        <div class="message receiver">
+            <strong>{{ review.user.username }}:</strong> {{ review.comment }}
+            <p>Rating: {{ review.rating }}/5</p>
+        </div>
+        {% empty %}
+        <p>No reviews yet.</p>
+        {% endfor %}
+        
+        <!-- Add Review -->
+        {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" class="btn">Add Review</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Suggested Products -->
+<div class="container">
+    <h3>Suggested Products</h3>
+    <div class="products-grid">
+        {% for sp in suggested_products %}
+        <div class="product-card">
+            <a href="{% url 'product_detail' sp.id %}">
+                <img src="{{ sp.image.url }}" alt="{{ sp.title }}">
+                <h3>{{ sp.title }}</h3>
+            </a>
+            <p class="price">₹{{ sp.estimated_value|floatformat:2 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

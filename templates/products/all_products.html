@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="productsContainer" class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{% url 'product_detail' product.id %}">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            <h3>{{ product.title }}</h3>
+        </a>
+        <p class="price">₹{{ product.estimated_value|floatformat:2 }}</p>
+</div>
+    {% empty %}
+    <p>No products found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

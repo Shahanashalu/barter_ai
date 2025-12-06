@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Matching Products{% endblock %}
+
+{% block content %}
+<h2>Matches for {{ my_product.title }}</h2>
+{% for p in matches %}
+    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+        <img src="{{ p.image.url }}" width="150">
+        <h3>{{ p.title }}</h3>
+        <a href="{% url 'send_offer' p.id %}">Send Offer</a>
+    </div>
+{% endfor %}
+{% endblock %}

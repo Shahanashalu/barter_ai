@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Home</h1>
+
+<!-- Search Form -->
+<form method="GET" class="search-form" style="margin-bottom:20px;">
+    <input type="text" name="q" placeholder="Search products..." value="{{ query }}">
+    <button type="submit" class="btn">Search</button>
+</form>
+
+<!-- Products Grid -->
+<div id="productsContainer" class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{% url 'product_detail' product.id %}">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            <h3>{{ product.title }}</h3>
+        </a>
+        <p class="price">₹{{ product.estimated_value|floatformat:2 }}</p>
+
+        {% if user.is_authenticated %}
+        <button class="favBtn" data-id="{{ product.id }}" style="border:none;background:none;cursor:pointer;font-size:24px;">
+            {% if product in user.favorites.all %}
+                ❤️
+            {% else %}
+                🤍
+            {% endif %}
+        </button>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>No products found.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+<!-- Wishlist AJAX Script -->
+<script>
+document.querySelectorAll('.favBtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const productId = btn.dataset.id;
+        try {
+            const res = await fetch(`/products/toggle_favorite/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            const data = await res.json();
+            if(data.status === 'added') btn.innerText = '❤️';
+            else if(data.status === 'removed') btn.innerText = '🤍';
+        } catch(err) { console.error(err); }
+    });
+});
+</script>

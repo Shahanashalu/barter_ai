@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Wishlist</h2>
+<div class="products-grid">
+    {% for product in favorite_products %}
+    <div class="product-card">
+        <a href="{% url 'product_detail' product.id %}">
+            <img src="{{ product.image.url }}" alt="{{ product.title }}">
+            <h3>{{ product.title }}</h3>
+        </a>
+        <p class="price">₹{{ product.estimated_value|floatformat:2 }}</p>
+        <button class="btn" data-id="{{ product.id }}" >Remove</button>
+    </div>
+    {% empty %}
+    <p>No products in wishlist yet.</p>
+    {% endfor %}
+</div>
+
+<script>
+const removeBtns = document.querySelectorAll('.remove-fav-btn');
+removeBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const productId = btn.getAttribute('data-id');
+        try {
+            const res = await fetch(`/products/toggle_favorite/${productId}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': '{{ csrf_token }}'}
+            });
+            const data = await res.json();
+            if(data.status === 'removed'){
+                btn.closest('.product-card').remove();
+            }
+        } catch(err){ console.error(err); }
+    });
+});
+</script>
+{% endblock %}

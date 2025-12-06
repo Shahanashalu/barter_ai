@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Send Offer{% endblock %}
+
+{% block content %}
+<h2>Send Offer for "{{ receiver_product.title }}"</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <label>Select your product to exchange:</label>
+    <select name="sender_product" required>
+        {% for p in sender_products %}
+            <option value="{{ p.id }}">{{ p.title }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button type="submit" class="btn">Send Offer</button>
+</form>
+
+<p>After sending the offer, go to <a href="{% url 'sent_offers' %}">Sent Offers</a>. 
+Once the receiver accepts it, you can click "Go to Chat" to start messaging.</p>
+{% endblock %}

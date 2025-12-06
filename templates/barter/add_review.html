@@ -1,0 +1,18 @@
+<h2>Leave a Review for {{ offer.receiver.username if request.user == offer.sender else offer.sender.username }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Review</button>
+    <p>Average Rating: {{ reviews|length|yesno:"No rating yet,," }} 
+{% if reviews %}
+    {% with total=0 %}
+        {% for r in reviews %}
+            {% with total=total|add:r.rating %}{% endwith %}
+        {% endfor %}
+        {{ total|divisibleby:reviews|length }} / 5
+    {% endwith %}
+{% endif %}
+</p>
+
+</form>

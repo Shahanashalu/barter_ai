@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<h2>Add Product</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Title" required><br>
+    <textarea name="description" placeholder="Description" required></textarea><br>
+
+    <select name="category">
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+        <option value="books">Books</option>
+        <option value="furniture">Furniture</option>
+        <option value="others">Others</option>
+    </select><br>
+
+    <input type="number" name="estimated_value" placeholder="Estimated Value" required><br>
+    <input type="text" name="condition" placeholder="Condition" required><br>
+    <input type="file" name="image" required><br>
+    <button type="submit" class="btn">Add Product</button>
+</form>
+{% endblock %}

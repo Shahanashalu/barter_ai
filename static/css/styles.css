@@ -1,0 +1,393 @@
+/* =========================
+   Global Styles
+========================= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fefcfb;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* =========================
+   Navbar
+========================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 15px 10%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar .logo a {
+    font-size: 24px;
+    font-weight: 700;
+    color: #5D5FEF;
+}
+
+.navbar .nav-links a {
+    margin-left: 20px;
+    font-weight: 500;
+    color: #555;
+    transition: color 0.3s;
+}
+
+.navbar .nav-links a:hover {
+    color: #5D5FEF;
+}
+
+/* =========================
+   Buttons
+========================= */
+.btn {
+    background-color: #5D5FEF;
+    color: #fff;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background-color: #4a4ccf;
+}
+
+/* =========================
+   Products Grid
+========================= */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.product-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+}
+
+.product-card img {
+    width: 100%;
+    max-width: 220px;
+    height: 220px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 12px auto;
+    border-radius: 8px;
+}
+
+
+.product-card h3 {
+    font-size: 16px;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.product-card p {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.product-card .price {
+    font-weight: 600;
+    color: #5D5FEF;
+    margin: 6px 0;
+}
+
+/* =========================
+   Product Detail Page
+========================= */
+.product-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.product-detail img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.product-detail-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.product-detail-info h2 {
+    font-size: 24px;
+    color: #5D5FEF;
+}
+
+.product-detail-info p {
+    margin: 8px 0;
+    color: #555;
+}
+
+.product-detail-info .price {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.product-detail-info .avg-rating {
+    margin-top: 5px;
+}
+
+/* =========================
+   Forms
+========================= */
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-top: 15px;
+}
+
+form input, form textarea, form select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+form button {
+    width: fit-content;
+}
+
+/* =========================
+   Chat Page Styling
+========================= */
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f7f8fc;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 70%;
+    word-wrap: break-word;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.message.sender {
+    align-self: flex-end;
+    background-color: #5D5FEF;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.message.receiver {
+    align-self: flex-start;
+    background-color: #fff;
+    color: #333;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.message .meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 4px;
+}
+
+.message.receiver .meta {
+    color: #888;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chat-input-inner {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    max-width: 600px; /* limits width of chat input */
+}
+
+
+.chat-input-inner textarea {
+    flex: 1;
+    height: 60px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    resize: none;
+}
+
+.chat-input button {
+    padding: 12px 20px;
+    border-radius: 12px;
+    background-color: #5D5FEF;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.chat-input button:hover {
+    background-color: #4a4ccf;
+}
+
+/* Scrollbar styling */
+.chat-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+.chat-input-container {
+    position: relative;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center; /* center the input area */
+}
+
+/* =========================
+   Misc
+========================= */
+ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* ==============
+Emoji
+==================*/
+
+.emoji-panel {
+    display: none;
+    position: absolute;
+    bottom: 70px; /* above input */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 8px;
+    gap: 6px;
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.emoji-panel .emoji {
+    cursor: pointer;
+    font-size: 22px;
+}
+
+#emojiBtn {
+    padding: 8px 10px;
+    border-radius: 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+#sendBtn {
+    padding: 12px 18px;
+    border-radius: 8px;
+    background-color: #5D5FEF;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.wishlist-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.wishlist-icon:hover {
+    transform: scale(1.2);
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+.pop {
+  animation: pop 0.3s ease;
+}

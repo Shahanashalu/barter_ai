@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Sent Offers{% endblock %}
+
+{% block content %}
+<style>
+.card {
+    border: 1px solid #333 !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+    background: #fafafa !important;
+    width: 100% !important;   /* Force vertical width */
+}
+</style>
+
+<h2>Sent Offers</h2>
+
+<div class="offer-container">
+
+{% for o in offers %}
+    <div class="card">
+        <p><strong>To:</strong> {{ o.receiver.username }}</p>
+        <p><strong>You offered:</strong> {{ o.sender_product.title }}</p>
+        <p><strong>For:</strong> {{ o.receiver_product.title }}</p>
+        <p><strong>Status:</strong> {{ o.status }}</p>
+
+        <a href="{% url 'offer_detail' o.id %}" class="btn">View Offer</a>
+
+        {% if o.status == 'accepted' %}
+            <a href="{% url 'offer_chat_page' o.id %}" class="btn">Go to Chat</a>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>No sent offers yet.</p>
+{% endfor %}
+
+</div>
+{% endblock %}
+
+
+
+

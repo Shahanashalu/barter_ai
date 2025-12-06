@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Chat about: "{{ offer.receiver_product.title }}"</h2>
+
+<div class="chat-container" id="messages"></div>
+
+<div class="chat-input-container">
+    <div class="chat-input-inner">
+        <button type="button" id="emojiBtn">😄</button>
+        <textarea id="messageInput" placeholder="Type your message..."></textarea>
+        <button id="sendBtn">Send</button>
+    </div>
+
+    <!-- Emoji panel -->
+    <div id="emojiPanel" class="emoji-panel">
+        <span class="emoji">😊</span>
+        <span class="emoji">👍</span>
+        <span class="emoji">❤️</span>
+        <span class="emoji">😡</span>
+        <span class="emoji">😢</span>
+    </div>
+</div>
+
+
+
+<script>
+// ------------------- Variables -------------------
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const offerId = {{ offer.id }};
+const userId = {{ request.user.id }};
+const fetchUrl = `/barter/api/messages/${offerId}/`;
+const sendUrl = `/barter/api/messages/${offerId}/send/`;
+const messagesEl = document.getElementById('messages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+let lastTimestamp = null;
+
+// ------------------- Render a message -------------------
+function renderMessage(msg){
+    const div = document.createElement('div');
+    div.className = 'message ' + (msg.sender_id === userId ? 'sender' : 'receiver');
+    div.setAttribute('data-msgid', msg.id);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerText = msg.sender_username + ' • ' + new Date(msg.timestamp).toLocaleString();
+
+    const text = document.createElement('div');
+    text.className = 'text';
+    text.innerText = msg.message;
+
+    div.appendChild(meta);
+    div.appendChild(text);
+    return div;
+}
+
+// ------------------- Append messages -------------------
+function appendMessages(messages){
+    messages.forEach(msg => {
+        if(!document.querySelector(`[data-msgid="${msg.id}"]`)){
+            messagesEl.appendChild(renderMessage(msg));
+            lastTimestamp = msg.timestamp;
+        }
+    });
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// ------------------- Fetch messages -------------------
+async function fetchMessages(){
+    let url = fetchUrl;
+    if(lastTimestamp) url += '?since=' + encodeURIComponent(lastTimestamp);
+    try {
+        const res = await fetch(url, { credentials:'same-origin' });
+        if(!res.ok) return;
+        const data = await res.json();
+        if(data.messages) appendMessages(data.messages);
+    } catch(err){ console.error(err); }
+}
+
+// ------------------- Send message -------------------
+async function sendMessage(){
+    const text = messageInput.value.trim();
+    if(!text) return;
+
+    sendBtn.disabled = true;
+
+    const formData = new URLSearchParams();
+    formData.append('message', text);
+
+    try {
+        const res = await fetch(sendUrl, {
+            method:'POST',
+            credentials:'same-origin',
+            headers:{
+                'X-CSRFToken': csrftoken,
+                'Content-Type':'application/x-www-form-urlencoded'
+            },
+            body: formData.toString()
+        });
+
+        if(!res.ok){ console.error('Send failed'); return; }
+        const data = await res.json();
+        if(data.message){
+            appendMessages([data.message]);
+            messageInput.value = '';
+        }
+    } catch(err){ console.error(err); }
+    finally { sendBtn.disabled = false; }
+}
+
+// ------------------- Event Listeners -------------------
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// ------------------- Polling every 3s -------------------
+setInterval(fetchMessages, 3000);
+fetchMessages(); // initial load
+
+// ---------------- Emoji Picker ----------------
+const emojiBtn = document.getElementById('emojiBtn');
+const emojiPanel = document.getElementById('emojiPanel');
+const emojis = document.querySelectorAll('.emoji-panel .emoji');
+
+// Toggle emoji panel
+emojiBtn.addEventListener('click', () => {
+    emojiPanel.style.display = emojiPanel.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Insert emoji into chat input
+emojis.forEach(emoji => {
+    emoji.addEventListener('click', () => {
+        messageInput.value += emoji.innerText;
+        emojiPanel.style.display = 'none';
+        messageInput.focus();
+    });
+});
+
+// Close panel if clicked outside
+document.addEventListener('click', (e) => {
+    if (!emojiPanel.contains(e.target) && e.target !== emojiBtn) {
+        emojiPanel.style.display = 'none';
+    }
+});
+
+</script>
+{% endblock %}

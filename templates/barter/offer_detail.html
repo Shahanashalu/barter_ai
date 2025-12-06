@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Offer Details{% endblock %}
+
+{% block content %}
+<h2>Offer Details</h2>
+
+<div class="card">
+    <p><strong>Sender:</strong> {{ offer.sender.username }}</p>
+    <p><strong>Offering:</strong> {{ offer.sender_product.title }}</p>
+    <p><strong>For Product:</strong> {{ offer.receiver_product.title }}</p>
+    <p><strong>Status:</strong> {{ offer.status }}</p>
+
+    {% if offer.receiver == request.user and offer.status == 'pending' %}
+        <a href="{% url 'accept_offer' offer.id %}" class="btn">Accept</a>
+        <a href="{% url 'reject_offer' offer.id %}" class="btn">Reject</a>
+    {% endif %}
+
+    {% if offer.status == 'accepted' %}
+        <a href="{% url 'offer_chat_page' offer.id %}" class="btn">Go to Chat</a>
+    {% endif %}
+</div>
+
+{% endblock %}
