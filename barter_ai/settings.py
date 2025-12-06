@@ -28,7 +28,9 @@ SECRET_KEY = 'django-insecure-0$h(w_=t8@7nrv757zu4+z1y!^pcurl@4!beysyhj9%qi-6z_%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["barter-ai.onrender.com",
+    "localhost",
+    "127.0.0.1"]
 
 
 # Application definition
