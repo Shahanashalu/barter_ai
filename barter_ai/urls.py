@@ -12,5 +12,5 @@ urlpatterns = [
     path('products/all/', product_list, name='all_products'),
     path('barter/', include('barter.urls')),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
