@@ -29,6 +29,7 @@ SECRET_KEY = 'django-insecure-0$h(w_=t8@7nrv757zu4+z1y!^pcurl@4!beysyhj9%qi-6z_%
 DEBUG = True
 
 ALLOWED_HOSTS = ["barter-ai.onrender.com",
+    "www.barter-ai.onrender.com",
     "localhost",
     "127.0.0.1"]
 
@@ -61,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 ]
 
 ROOT_URLCONF = 'barter_ai.urls'
